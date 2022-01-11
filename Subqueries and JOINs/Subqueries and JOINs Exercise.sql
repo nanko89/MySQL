@@ -1,5 +1,5 @@
+-- DATABASE SOFTUNI
 # --------------Ex 1 -------------
-
 SELECT 
     e.`employee_id`,
     e.`job_title`,
@@ -151,6 +151,7 @@ GROUP BY `department_id`
 ORDER BY `avg_salary`
 LIMIT 1;
 
+-- DATABASE GEOGRAPHY
 # -------------- Ex.12 --------------
 
 SELECT 
