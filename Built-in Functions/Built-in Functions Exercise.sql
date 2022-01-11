@@ -82,6 +82,8 @@ WHERE
 ORDER BY `start` , `name`
 LIMIT 50;
 
+# ----------Ex 13---------
+
 SELECT 
     `user_name`,
     SUBSTRING(`email`,
@@ -99,6 +101,7 @@ FROM
 WHERE
     `ip_address` LIKE '___.1%.%.___'
 ORDER BY `user_name`;
+
 # ----------Ex 15---------
 
 SELECT 
