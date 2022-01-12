@@ -8,6 +8,8 @@ FROM `wizzard_deposits`;
 SELECT MAX(`magic_wand_size`) AS 'longest_magic_wand'
 FROM `wizzard_deposits`;
 
+ # --------Ex 3 ---------
+
 SELECT 
     `deposit_group`,
     MAX(`magic_wand_size`) AS 'longest_magic_wand'
@@ -15,6 +17,8 @@ FROM
     `wizzard_deposits`
 GROUP BY `deposit_group`
 ORDER BY `longest_magic_wand` , `deposit_group`;
+
+ # --------Ex 4 ---------
 
 SELECT 
     `deposit_group`
@@ -24,12 +28,16 @@ GROUP BY `deposit_group`
 ORDER BY AVG(`magic_wand_size`)
 LIMIT 1;
 
+ # --------Ex 5 ---------
+
 SELECT 
     `deposit_group`, SUM(`deposit_amount`) AS 'total_sum'
 FROM
     `wizzard_deposits`
 GROUP BY `deposit_group`
 ORDER BY `total_sum`;
+
+ # --------Ex 6 ---------
 
 SELECT 
     `deposit_group`, SUM(`deposit_amount`) AS 'total_sum'
@@ -39,6 +47,8 @@ WHERE
     `magic_wand_creator` = 'Ollivander family'
 GROUP BY `deposit_group`
 ORDER BY `deposit_group`;
+
+ # --------Ex 7 ---------
 
 SELECT 
     `deposit_group`, SUM(`deposit_amount`) AS 'total_sum'
@@ -50,6 +60,8 @@ GROUP BY `deposit_group`
 HAVING `total_sum` < 150000
 ORDER BY `total_sum` DESC;
 
+ # --------Ex 8 ---------
+
 SELECT 
     `deposit_group`, `magic_wand_creator`, MIN(`deposit_charge`)
 FROM
@@ -57,6 +69,8 @@ FROM
 GROUP BY `deposit_group` , `magic_wand_creator`
 ORDER BY `magic_wand_creator` , `deposit_group`;
  
+ # --------Ex 9 ---------
+
 SELECT 
     (CASE
         WHEN `age` BETWEEN 0 AND 10 THEN '[0-10]'
@@ -73,6 +87,8 @@ FROM
 GROUP BY `age_group`
 ORDER BY `age_group`;
  
+  # --------Ex 10 ---------
+
 SELECT DISTINCT
     LEFT(`first_name`, 1) AS `first_letter`
 FROM
@@ -82,6 +98,8 @@ WHERE
 GROUP BY `first_letter`
 ORDER BY `first_letter`;
  
+ # --------Ex 11 ---------
+
 SELECT 
     `deposit_group`,
     `is_deposit_expired`,
