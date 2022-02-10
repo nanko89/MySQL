@@ -210,7 +210,65 @@ FROM
 GROUP BY u.id
 ORDER BY my_comments DESC , u.id;
 
----------------- 12 -----------------
+---------------- 13 -----------------
 
+SELECT 
+    u.id, u.username, comments.caption AS post
+FROM
+    (SELECT 
+        p.id, p.caption, COUNT(c.post_id) AS comments, p.user_id
+    FROM
+        comments AS c
+    RIGHT JOIN posts AS p ON p.id = c.post_id
+    GROUP BY p.id
+    ORDER BY comments DESC) AS comments
+        JOIN
+    users AS u ON u.id = comments.user_id
+GROUP BY u.id
+ORDER BY u.id; 
 
+---------------- 14 -----------------
 
+SELECT p.id, p.caption, COUNT(c.user_id) AS count_users
+FROM posts AS p
+LEFT JOIN comments c ON p.id = c.post_id
+GROUP BY p.id
+ORDER BY count_users DESC, p.id;
+
+---------------- 15 -----------------
+
+DELIMITER %%
+
+CREATE PROCEDURE udp_post (username VARCHAR(30), `password` VARCHAR(30), caption VARCHAR (255), `path` VARCHAR (255))
+		BEGIN 
+        IF (SELECT u.`password` FROM users AS u 
+			WHERE u.`username` = username ) != `password` THEN 
+				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Password is incorrect!';
+                
+        ELSEIF (SELECT p.`path` FROM pictuers AS p
+				WHERE p.`path` = `path`) IS NULL THEN 
+                SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'The picture does not exist!';
+                
+		ELSE
+			INSERT 
+				INTO posts (caption, user_id, picture_id)
+			SELECT caption,
+               (SELECT u.id
+					FROM users AS u
+                WHERE u.username = username) AS user_id,
+               (SELECT p.id 
+					FROM pictures AS p
+				WHERE p.`path` = `path`) AS picture_id;
+    END IF ;
+        END %%
+        
+---------------- 16 -----------------
+
+CREATE PROCEDURE udp_filter (hashtag VARCHAR(255))
+BEGIN
+    SELECT p.id, p.caption, u.username
+    FROM posts AS p
+    JOIN users u ON p.user_id = u.id
+    WHERE p.caption LIKE (concat('%', hashtag, '%'))
+    ORDER BY p.id;
+END %%
