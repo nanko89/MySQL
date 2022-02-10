@@ -157,5 +157,60 @@ WHERE
             u.profile_picture_id = u2.profile_picture_id) > 1
 ORDER BY u.id;
 	
+---------------- 10 -----------------
+
+SELECT p.id, p.caption, COUNT(c.id) AS count_comments
+	FROM posts AS p
+				JOIN
+		comments AS c ON p.id = c.post_id
+GROUP BY p.id
+ORDER BY count_comments DESC, p.id
+LIMIT 5;
+
+---------------- 11 -----------------
+
+
+SELECT 
+    u.id,
+    u.username,
+    (SELECT 
+            COUNT(p2.user_id)
+        FROM
+            posts AS p2
+        WHERE
+            p2.user_id = p.user_id) AS posts,
+    (SELECT 
+            COUNT(uf2.follower_id)
+        FROM
+            users_followers AS uf2
+        WHERE
+            uf2.user_id = uf.user_id) AS followers
+FROM
+    users AS u
+        JOIN
+    posts AS p ON p.user_id = u.id
+        JOIN
+    comments AS c ON c.user_id = u.id
+        JOIN
+    users_followers AS uf ON uf.user_id = u.id
+GROUP BY u.id
+ORDER BY followers DESC
+LIMIT 1;
+
+---------------- 12 -----------------
+
+SELECT 
+    u.id, u.username, COUNT(c.id) AS my_comments
+FROM
+    users AS u
+        LEFT JOIN
+    posts AS p ON p.user_id = u.id
+        LEFT JOIN
+    comments AS c ON c.user_id = u.id AND p.id = c.post_id
+GROUP BY u.id
+ORDER BY my_comments DESC , u.id;
+
+---------------- 12 -----------------
+
 
 
