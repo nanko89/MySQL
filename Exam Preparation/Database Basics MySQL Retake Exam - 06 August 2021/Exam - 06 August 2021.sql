@@ -1,6 +1,8 @@
 CREATE DATABASE sgd;
 USE sgd;
 
+-- 1---------------------------
+
 CREATE TABLE addresses (
     id INT PRIMARY KEY AUTO_INCREMENT,
     `name` VARCHAR(50) NOT NULL
@@ -64,9 +66,13 @@ CREATE TABLE games_categories (
         REFERENCES categories (id)
 );
 
+-- 2---------------------------
+
 INSERT INTO games (`name`, rating , budget, team_id )
 SELECT (LCASE(REVERSE(SUBSTRING(`name`, 2)))), id, leader_id * 1000, id FROM teams
 WHERE id BETWEEN 1 AND 9;
+
+-- 3---------------------------
 
 UPDATE employees 
 SET 
@@ -79,6 +85,9 @@ WHERE
             teams)
         AND salary < 5000;
 
+-- 4---------------------------
+
+
 DELETE FROM games 
 WHERE
     release_date IS NULL
@@ -87,11 +96,18 @@ WHERE
     FROM
         games_categories);
 
+-- 5---------------------------
+
+
 SELECT 
     first_name, last_name, age, salary, happiness_level
 FROM
     employees
 ORDER BY salary , id;
+
+
+-- 6---------------------------
+
 
 SELECT 
     t.`name` AS teams_name,
@@ -108,6 +124,8 @@ WHERE
 ORDER BY teams_name , address_name;
 
 
+-- 7---------------------------
+
 SELECT 
     c.`name`,
     COUNT(gc.game_id) AS count_game,
@@ -122,6 +140,8 @@ FROM
 GROUP BY c.`name`
 HAVING max_rating >= 9.5
 ORDER BY count_game DESC , c.`name`;
+
+-- 8---------------------------
 
 SELECT 
     g.`name`,
@@ -146,6 +166,9 @@ WHERE
             games_categories)
 ORDER BY g.`name`;
 
+
+-- 10---------------------------
+
 DELIMITER %%
 
 CREATE FUNCTION udf_game_info_by_name (game_name VARCHAR (20))
@@ -165,6 +188,8 @@ DETERMINISTIC
 WHERE g.`name` = game_name);
     END%%
     
+    -- 11---------------------------
+
     CREATE PROCEDURE udp_update_budget (rating FLOAT)
 		BEGIN
         UPDATE games
